@@ -1,0 +1,181 @@
+<app-filter-bar [mapView]="mapView" (filterRequest)="filter($event)"></app-filter-bar>
+
+<mat-grid-list *ngIf="dogs.length && !mapView.show" cols="4" rowHeight="9:12" gutterSize="20">
+  <mat-grid-tile *ngFor="let dog of dogs">
+    <mat-card class="dog-card">
+      <mat-card-header>
+        <mat-card-title>{{dog.name}}</mat-card-title>
+        <mat-card-subtitle>{{dog.breed.Breed}}, {{dog.gender}}, age of {{dog.age}}</mat-card-subtitle>
+        <span class="spacer"></span>
+        <button mat-icon-button color="primary">
+          <mat-icon matTooltipPosition="above" matTooltip="Mark as adopted" (click)="adopted(dog)" svgIcon="adopt-dog">
+          </mat-icon>
+        </button>
+        <button (click)="openEditDialog(dog)" mat-icon-button color="primary">
+          <mat-icon matTooltipPosition="above" matTooltip="Edit">edit</mat-icon>
+        </button>
+        <button (click)="remove(dog)" mat-icon-button color="warn">
+          <mat-icon matTooltipPosition="above" matTooltip="Delete">delete_outline</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <img mat-card-image [@simpleFadeAnimation]="'in'" [src]="dog.profile_image">
+      <mat-card-content>
+        <p>
+          {{dog.description}}
+        </p>
+      </mat-card-content>
+      <mat-divider></mat-divider>
+      <mat-card-footer>
+        <div class="info-block">
+          <div>
+            <mat-icon class="owner-info">
+              person_outline
+            </mat-icon>
+          </div>
+          <div>
+            <span>
+              {{dog.owner.fullName}}
+            </span>
+          </div>
+        </div>
+        <div class="info-block">
+          <div>
+            <mat-icon class="owner-info">
+              mail_outline
+            </mat-icon>
+          </div>
+          <div>
+            <span>
+              {{dog.owner.email}}
+            </span>
+          </div>
+        </div>
+        <div class="info-block">
+          <div>
+            <mat-icon class="owner-info">
+              phone_android
+            </mat-icon>
+          </div>
+          <div>
+            <span>
+              {{dog.owner.phoneNumber}}
+            </span>
+          </div>
+        </div>
+        <div class="info-block">
+          <div>
+            <mat-icon class="owner-info">
+              location_city
+            </mat-icon>
+          </div>
+          <div>
+            <span>
+              {{dog.owner.address.country}}, {{dog.owner.address.city}}, {{dog.owner.address.street}},
+              {{dog.owner.address.number}}
+            </span>
+          </div>
+        </div>
+      </mat-card-footer>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+<div class="map-container mat-elevation-z1">
+  <agm-map *ngIf="mapView.show" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+    <agm-marker *ngFor="let dog of dogs" [latitude]="dog.owner.address.location.lat"
+      [longitude]="dog.owner.address.location.lng" [title]="lala">
+      <agm-info-window>
+        <mat-card class="dog-card">
+          <mat-card-header>
+            <mat-card-title>{{dog.name}}</mat-card-title>
+            <mat-card-subtitle>{{dog.breed.Breed}}, {{dog.gender}}, age of {{dog.age}}</mat-card-subtitle>
+            <span class="spacer"></span>
+            <button mat-icon-button color="primary">
+              <mat-icon matTooltipPosition="above" matTooltip="Mark as adopted" (click)="adopted(dog)"
+                svgIcon="adopt-dog">
+              </mat-icon>
+            </button>
+            <button (click)="openEditDialog(dog)" mat-icon-button color="primary">
+              <mat-icon matTooltipPosition="above" matTooltip="Edit">edit</mat-icon>
+            </button>
+            <button (click)="remove(dog)" mat-icon-button color="warn">
+              <mat-icon matTooltipPosition="above" matTooltip="Delete">delete_outline</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <img mat-card-image [@simpleFadeAnimation]="'in'" [src]="dog.profile_image">
+          <mat-card-content>
+            <p>
+              {{dog.description}}
+            </p>
+          </mat-card-content>
+          <mat-divider></mat-divider>
+          <mat-card-footer>
+            <div class="info-block">
+              <div>
+                <mat-icon class="owner-info">
+                  person_outline
+                </mat-icon>
+              </div>
+              <div>
+                <span>
+                  {{dog.owner.fullName}}
+                </span>
+              </div>
+            </div>
+            <div class="info-block">
+              <div>
+                <mat-icon class="owner-info">
+                  mail_outline
+                </mat-icon>
+              </div>
+              <div>
+                <span>
+                  {{dog.owner.email}}
+                </span>
+              </div>
+            </div>
+            <div class="info-block">
+              <div>
+                <mat-icon class="owner-info">
+                  phone_android
+                </mat-icon>
+              </div>
+              <div>
+                <span>
+                  {{dog.owner.phoneNumber}}
+                </span>
+              </div>
+            </div>
+            <div class="info-block">
+                <div>
+                  <mat-icon class="owner-info">
+                    location_city
+                  </mat-icon>
+                </div>
+                <div>
+                  <span>
+                    {{dog.owner.address.country}}, {{dog.owner.address.city}}, {{dog.owner.address.street}},
+                    {{dog.owner.address.number}}
+                  </span>
+                </div>
+              </div>
+          </mat-card-footer>
+        </mat-card>
+      </agm-info-window>
+    </agm-marker>
+  </agm-map>
+</div>
+
+<button *ngIf="!mapView.show" (click)="openAddDialog()" mat-fab color="primary">
+  <mat-icon>add</mat-icon>
+</button>
+
+
+
+<div class="no-results" *ngIf="dogs.length === 0">
+  <img src="../../assets/no-results.png">
+  <h2>
+    Sorry, we didn't find what you seek...
+  </h2>
+</div>
