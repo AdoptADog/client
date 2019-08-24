@@ -1,0 +1,16 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.actions {
+  display: flex;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+ display: flex;
+}
